@@ -68,7 +68,7 @@ YYYY-MM-DD_주제_문서종류_버전_언어.확장자
 
 ## 선택적 Drive 설명 메타데이터
 
-Google Drive의 파일 상세정보에서 **설명(Description)**을 열고 `항목: 값` 형식으로 입력합니다. 대소문자와 공백은 유연하게 처리됩니다.
+Google Drive의 파일 상세정보에서 설명(Description)을 열고 `항목: 값` 형식으로 입력합니다. 대소문자와 공백은 유연하게 처리됩니다.
 
 ### 공통 문서 예시
 
@@ -164,14 +164,12 @@ currentOrArchive: Current
 
 ## 공개 범위
 
-동기화는 파일 권한 중 `type: anyone`을 확인합니다. 다음 자료는 제외됩니다.
+기존 `Cellpinda Global Data Room` 최상위 폴더는 `링크가 있는 모든 사용자 → 뷰어`로 운영합니다. Apps Script는 이 승인된 공개 루트만 재귀적으로 읽으며, 개인 Drive와 별도 내부/NDA Data Room은 탐색하지 않습니다.
 
-- 특정 이메일만 접근 가능한 파일
-- 조직 내부만 접근 가능한 파일
-- 공개 링크가 해제된 파일
-- 만료된 공개 권한만 존재하는 파일
-
-상위 폴더 공개 권한을 상속받은 파일도 Drive API에서 공개 권한으로 확인되는 경우 포함됩니다.
+- 공개 루트에 들어간 하위 폴더와 파일은 상위 공개 권한을 상속받아 인덱스 대상이 됩니다.
+- 스크립트는 `00_ADMIN_AND_INDEX`, `02_CONTROLLED_ACCESS`, `03_NDA_ONLY`, `04_COUNTRY_PACKS`, `05_SHIPMENT_DOCUMENTS`, `06_EXPIRED_SUPERSEDED`, `LEGACY_PUBLIC_DOWNLOADS_EMPTY` 이름의 예약 내부 폴더를 발견하면 제외합니다.
+- 공개 웹에 표시하면 안 되는 자료는 공개 Data Room에 넣지 않고 별도 내부 Data Room에 보관합니다.
+- Apps Script는 읽기 전용 Drive 범위만 사용하며 파일을 수정하거나 삭제하지 않습니다.
 
 ## 99_Archive 사용 원칙
 
@@ -186,6 +184,6 @@ status: Superseded
 ## 삭제와 비공개 전환
 
 - Drive에서 파일 삭제: 다음 동기화에서 인덱스 삭제
-- 공개 권한 해제: 다음 동기화에서 공개 인덱스 삭제
+- 공개 Data Room 밖으로 이동: 다음 동기화에서 공개 인덱스 삭제
 - 파일 수정: Drive 수정일과 메타데이터가 갱신
 - 파일 이동: 새 폴더 규칙으로 카테고리 재분류
