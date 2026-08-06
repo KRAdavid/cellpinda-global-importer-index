@@ -11,6 +11,8 @@ on:
       - main
     paths:
       - bootstrap/READY
+      - bootstrap/part-*
+      - .github/workflows/bootstrap-mvp.yml
 
 permissions:
   contents: write
@@ -31,11 +33,32 @@ jobs:
           ref: feature/google-drive-index-v1
           fetch-depth: 0
 
-      - name: Reconstruct and verify MVP archive
+      - name: Validate bootstrap parts
         shell: bash
         run: |
           set -euo pipefail
           test -f bootstrap/READY
+          for file in bootstrap/part-*; do
+            clean_file="$(mktemp)"
+            tr -d '[:space:]' < "$file" > "$clean_file"
+            raw_bytes="$(wc -c < "$file" | tr -d ' ')"
+            clean_bytes="$(wc -c < "$clean_file" | tr -d ' ')"
+            echo "$file raw=$raw_bytes clean=$clean_bytes remainder=$((clean_bytes % 4))"
+            if LC_ALL=C grep -n '[^A-Za-z0-9+/=]' "$clean_file"; then
+              echo "::error file=$file::Non-base64 characters detected"
+              exit 1
+            fi
+            if ! base64 --decode "$clean_file" > /dev/null 2>&1; then
+              echo "::error file=$file::Base64 decoding failed"
+              exit 1
+            fi
+            rm -f "$clean_file"
+          done
+
+      - name: Reconstruct and verify MVP archive
+        shell: bash
+        run: |
+          set -euo pipefail
           cat bootstrap/part-* | tr -d '[:space:]' | base64 --decode > /tmp/cellpinda-mvp.zip
           echo "facc647f40bfa6e45edeb2d36e86ed263fe07d04f39316653e7ae1228e4aa5e3  /tmp/cellpinda-mvp.zip" | sha256sum -c -
           unzip -t /tmp/cellpinda-mvp.zip
