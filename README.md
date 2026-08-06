@@ -8,7 +8,7 @@ A responsive, public B2B knowledge index for importers evaluating **Cellpinda GA
 - Home dashboard and ten requested knowledge-index screens
 - Full-text client-side search and filters for category, country, lifecycle and evidence status
 - Explicit certificate, evidence and regulatory qualification controls
-- Sample JSON records with disabled links until Drive is connected
+- Sample JSON records with disabled links until the first live Drive synchronization
 - Daily Google Drive synchronization workflow
 - Public-file-only permission check
 - Automatic expiry-to-Archive handling
@@ -19,7 +19,7 @@ A responsive, public B2B knowledge index for importers evaluating **Cellpinda GA
 ## Architecture
 
 ```text
-Google Drive: Cellpinda Global Data Room
+Existing Google Drive: Cellpinda Global Data Room
              │
              │ Drive API (read-only service account)
              ▼
@@ -38,6 +38,16 @@ Next.js static export → out/ → Vercel or Cloudflare Pages
 ```
 
 The synchronization workflow never uploads Drive originals to GitHub. The public site exposes metadata and public Drive links only.
+
+## Active Google Drive source
+
+The project uses the existing public folder below. A new Drive or duplicate data room is not required.
+
+- Folder: `Cellpinda Global Data Room`
+- Folder ID: `1f7GoC25SGkIyRZa85qGdbmf0Rb0Pkde6`
+- General access: `Anyone with the link → Viewer`
+
+Permissions applied to the root folder propagate to its child folders and files. Files placed outside this public Data Room are not indexed.
 
 ## Information architecture
 
@@ -82,20 +92,26 @@ To test Drive synchronization locally, configure `.env` values based on `.env.ex
 npm run sync:drive
 ```
 
-Do not commit a service-account key or API key.
+Never commit the service-account JSON key.
 
 ## Required repository configuration
 
 Follow [SETUP_GUIDE_KO.md](./SETUP_GUIDE_KO.md) in order. The minimum live-sync configuration is:
 
-- `GOOGLE_DRIVE_ROOT_FOLDER_ID` repository secret
+- existing `Cellpinda Global Data Room` retained as the source folder
 - `GOOGLE_SERVICE_ACCOUNT_JSON` repository secret
-- Google Drive API enabled for the service account project
-- root Drive folder shared with the service account as Viewer
-- source documents shared publicly as Viewer
+- Google Drive API enabled in the service-account project
+- public Data Room shared with the service account as Viewer
+- root folder and source documents available as `Anyone with the link → Viewer`
 - GitHub Actions permitted to create Pull Requests
 
+The public root-folder ID is already configured in the workflow; it does not need to be registered as a separate secret.
+
 `OPENAI_API_KEY` is optional. Folder and filename rules remain fully operational without it.
+
+## Public and internal material boundary
+
+Everything placed under `Cellpinda Global Data Room` is treated as web-public source material. Customer-confidential documents, personal information, contracts, unpublished regulatory drafts and NDA-only materials must stay outside this folder. The separate internal Data Room is not scanned by GitHub Actions.
 
 ## Safety and content controls
 
