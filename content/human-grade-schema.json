@@ -1,0 +1,65 @@
+{
+  "version": "1.0.0",
+  "purpose": "Canonical public metadata schema for the Cellpinda human-grade GABA index",
+  "sourceOfTruth": {
+    "records": "Google Sheets",
+    "files": "Google Drive",
+    "api": "Google Apps Script",
+    "frontend": "GitHub Pages static export"
+  },
+  "sheet": {
+    "tab": "PUBLIC_INDEX",
+    "requiredColumns": [
+      "id",
+      "status",
+      "title_ko",
+      "title_en",
+      "title_ja",
+      "title_zh",
+      "summary_ko",
+      "summary_en",
+      "summary_ja",
+      "summary_zh",
+      "audiences",
+      "category",
+      "subcategory",
+      "country",
+      "evidence_level",
+      "regulatory_status",
+      "drive_file_id",
+      "public_url",
+      "published_at",
+      "updated_at"
+    ],
+    "audienceValues": [
+      "consumer",
+      "distributor",
+      "brand",
+      "laboratory",
+      "enterprise",
+      "investor"
+    ],
+    "categoryValues": [
+      "product",
+      "manufacturing",
+      "quality",
+      "analysis",
+      "regulatory",
+      "science",
+      "applications",
+      "market",
+      "case-study",
+      "patent",
+      "investment",
+      "download"
+    ],
+    "statusValues": ["draft", "review", "published", "archived"]
+  },
+  "publishingRules": [
+    "Only status=published records are included in the public API.",
+    "Every published record must include at least Korean and English titles and summaries.",
+    "Drive links must be public and must belong to the approved public data room.",
+    "Medical or regulatory claims require source attribution and review status.",
+    "Expired or superseded records must be archived rather than silently deleted."
+  ]
+}
