@@ -1,18 +1,17 @@
 {
   "name": "cellpinda-global-importer-index",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "validate": "node scripts/validate-index.mjs",
-    "sync:drive": "node scripts/sync-drive.mjs",
+    "sync:drive": "node scripts/sync-public-feed.mjs",
+    "sync:drive-api": "node scripts/sync-drive.mjs",
     "check": "npm run validate && npm run test:sync-rules && npm run build",
-    "test:sync-rules": "node scripts/sync-drive.mjs --self-test"
+    "test:sync-rules": "node scripts/sync-public-feed.mjs --self-test"
   },
-  "engines": {
-    "node": ">=22.0.0"
-  },
+  "engines": { "node": ">=22.0.0" },
   "dependencies": {
     "next": "16.2.11",
     "react": "19.2.0",
