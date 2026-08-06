@@ -1,0 +1,492 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-06T00:00:00.000Z",
+  "sourceMode": "sample",
+  "sourceSnapshot": "sample-mvp-v1",
+  "documents": [
+    {
+      "id": "sample-product-specification",
+      "title": "Cellpinda GABA 100% Product Specification — Sample Record",
+      "category": "Product",
+      "subcategory": "Specification",
+      "country": "Global",
+      "language": "English",
+      "version": "Draft template",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "PDF",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "Sample metadata record. The current public product specification will replace this entry after Google Drive synchronization is configured.",
+      "tags": [
+        "product",
+        "specification",
+        "sample"
+      ],
+      "status": "Documentation incomplete",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "01_Product",
+        "Sample_Product_Specification.pdf"
+      ],
+      "sample": true,
+      "featured": true
+    },
+    {
+      "id": "sample-manufacturing-flow",
+      "title": "Manufacturing Process Flow — Sample Record",
+      "category": "Manufacturing",
+      "subcategory": "Process Flow",
+      "country": "Republic of Korea",
+      "language": "English",
+      "version": "Draft template",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "PDF",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "Sample manufacturing-flow record covering cultivation, fermentation, purification, crystallization, drying and packaging.",
+      "tags": [
+        "manufacturing",
+        "fermentation",
+        "process",
+        "sample"
+      ],
+      "status": "Documentation incomplete",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "02_Manufacturing",
+        "Sample_Manufacturing_Flow.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-fssc-22000",
+      "title": "FSSC 22000 Version 6.0 Certificate",
+      "category": "Quality Certificates",
+      "subcategory": "Food Safety Management",
+      "country": "Republic of Korea",
+      "language": "English",
+      "version": "6.0",
+      "issueDate": null,
+      "expiryDate": "2028-07-02",
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Certificate",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "Certificate number 25-FSSC-0342. Public Drive original pending connection.",
+      "tags": [
+        "FSSC 22000",
+        "certificate",
+        "quality",
+        "featured",
+        "sample"
+      ],
+      "status": "Current",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "03_Quality_Certificates",
+        "FSSC_22000_Sample.pdf"
+      ],
+      "sample": true,
+      "featured": true
+    },
+    {
+      "id": "sample-haccp",
+      "title": "HACCP Certificate",
+      "category": "Quality Certificates",
+      "subcategory": "HACCP",
+      "country": "Republic of Korea",
+      "language": "Korean",
+      "version": "Current record",
+      "issueDate": null,
+      "expiryDate": "2027-01-11",
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Certificate",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "HACCP certificate metadata. Public Drive original pending connection.",
+      "tags": [
+        "HACCP",
+        "certificate",
+        "quality",
+        "sample"
+      ],
+      "status": "Current",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "03_Quality_Certificates",
+        "HACCP_Sample.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-iso-22000",
+      "title": "ISO 22000 Certificate",
+      "category": "Quality Certificates",
+      "subcategory": "Food Safety Management",
+      "country": "Republic of Korea",
+      "language": "English",
+      "version": "Current record",
+      "issueDate": null,
+      "expiryDate": "2028-08-18",
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Certificate",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "ISO 22000 certificate metadata. Public Drive original pending connection.",
+      "tags": [
+        "ISO 22000",
+        "certificate",
+        "quality",
+        "sample"
+      ],
+      "status": "Current",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "03_Quality_Certificates",
+        "ISO_22000_Sample.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-halal-renewal",
+      "title": "Halal Certificate — Renewal Required",
+      "category": "Quality Certificates",
+      "subcategory": "Halal",
+      "country": "Global",
+      "language": "English",
+      "version": "Renewal pending",
+      "issueDate": null,
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Certificate",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "The available status indicates renewal is required. This item is not presented as a current certificate.",
+      "tags": [
+        "Halal",
+        "renewal",
+        "certificate",
+        "sample"
+      ],
+      "status": "Renewal required",
+      "currentOrArchive": "Archive",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "99_Archive",
+        "Halal_Renewal_Required_Sample.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-kosher-renewal",
+      "title": "Kosher Certificate — Renewal Required",
+      "category": "Quality Certificates",
+      "subcategory": "Kosher",
+      "country": "Global",
+      "language": "English",
+      "version": "Renewal pending",
+      "issueDate": null,
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Certificate",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "The available status indicates renewal is required. This item is not presented as a current certificate.",
+      "tags": [
+        "Kosher",
+        "renewal",
+        "certificate",
+        "sample"
+      ],
+      "status": "Renewal required",
+      "currentOrArchive": "Archive",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "99_Archive",
+        "Kosher_Renewal_Required_Sample.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-evidence-sleep",
+      "title": "Sleep Evidence Record Template",
+      "category": "Scientific Evidence",
+      "subcategory": "Sleep",
+      "country": "Global",
+      "language": "English",
+      "version": "Template",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Research record",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "Template showing how sleep-related evidence will be indexed after public papers are added to Drive.",
+      "tags": [
+        "sleep",
+        "evidence",
+        "template",
+        "sample"
+      ],
+      "status": "Not reviewed",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "04_Scientific_Evidence",
+        "Sleep",
+        "Evidence_Template.pdf"
+      ],
+      "sample": true,
+      "research": {
+        "studyType": "Not entered",
+        "population": "Not entered",
+        "sampleSize": null,
+        "dose": "Not entered",
+        "duration": "Not entered",
+        "keyResults": "Not entered",
+        "limitations": "Not entered",
+        "evidenceStatus": "Insufficient",
+        "pmid": null,
+        "doi": null,
+        "cellpindaDirectness": "Not assessed"
+      }
+    },
+    {
+      "id": "sample-evidence-stress",
+      "title": "Stress Evidence Record Template",
+      "category": "Scientific Evidence",
+      "subcategory": "Stress",
+      "country": "Global",
+      "language": "English",
+      "version": "Template",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Research record",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "Template showing how stress-related evidence will be indexed after public papers are added to Drive.",
+      "tags": [
+        "stress",
+        "evidence",
+        "template",
+        "sample"
+      ],
+      "status": "Not reviewed",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "04_Scientific_Evidence",
+        "Stress",
+        "Evidence_Template.pdf"
+      ],
+      "sample": true,
+      "research": {
+        "studyType": "Not entered",
+        "population": "Not entered",
+        "sampleSize": null,
+        "dose": "Not entered",
+        "duration": "Not entered",
+        "keyResults": "Not entered",
+        "limitations": "Not entered",
+        "evidenceStatus": "Insufficient",
+        "pmid": null,
+        "doi": null,
+        "cellpindaDirectness": "Not assessed"
+      }
+    },
+    {
+      "id": "sample-regulatory-usa",
+      "title": "United States Regulatory Review Placeholder",
+      "category": "Regulatory",
+      "subcategory": "USA",
+      "country": "USA",
+      "language": "English",
+      "version": "Not yet reviewed",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Regulatory record",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "No product-specific conclusion is recorded. Official pathway and local importer review must be documented before use.",
+      "tags": [
+        "USA",
+        "regulatory",
+        "local confirmation",
+        "sample"
+      ],
+      "status": "Not yet reviewed",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "05_Regulatory",
+        "USA",
+        "Review_Placeholder.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-regulatory-canada",
+      "title": "Canada Regulatory Review Placeholder",
+      "category": "Regulatory",
+      "subcategory": "Canada",
+      "country": "Canada",
+      "language": "English",
+      "version": "Not yet reviewed",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Regulatory record",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "No product-specific conclusion is recorded. Official pathway and local importer review must be documented before use.",
+      "tags": [
+        "Canada",
+        "regulatory",
+        "local confirmation",
+        "sample"
+      ],
+      "status": "Not yet reviewed",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "05_Regulatory",
+        "Canada",
+        "Review_Placeholder.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-regulatory-eu",
+      "title": "European Union Regulatory Review Placeholder",
+      "category": "Regulatory",
+      "subcategory": "EU",
+      "country": "EU",
+      "language": "English",
+      "version": "Not yet reviewed",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Regulatory record",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "No product-specific conclusion is recorded. Official pathway and local importer review must be documented before use.",
+      "tags": [
+        "EU",
+        "regulatory",
+        "local confirmation",
+        "sample"
+      ],
+      "status": "Not yet reviewed",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "05_Regulatory",
+        "EU",
+        "Review_Placeholder.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-patent-index",
+      "title": "Patent Portfolio Index — Sample Record",
+      "category": "Patents",
+      "subcategory": "Portfolio",
+      "country": "Global",
+      "language": "English",
+      "version": "Draft template",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Patent index",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "Template for patent publications, jurisdictions, legal-status links and technology summaries.",
+      "tags": [
+        "patent",
+        "technology",
+        "portfolio",
+        "sample"
+      ],
+      "status": "Documentation incomplete",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "06_Patents",
+        "Patent_Index_Template.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-case-study",
+      "title": "Importer Case Study Template",
+      "category": "Case Studies",
+      "subcategory": "Importer",
+      "country": "Global",
+      "language": "English",
+      "version": "Template",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Case study",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "Template separating market context, application, implementation, measured result, limitations and evidence source.",
+      "tags": [
+        "case study",
+        "importer",
+        "commercial",
+        "sample"
+      ],
+      "status": "Documentation incomplete",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "07_Case_Studies",
+        "Importer_Case_Study_Template.pdf"
+      ],
+      "sample": true
+    },
+    {
+      "id": "sample-market-insight",
+      "title": "Global GABA Market Insight Template",
+      "category": "Market Insights",
+      "subcategory": "Global",
+      "country": "Global",
+      "language": "English",
+      "version": "Template",
+      "issueDate": "2026-08-06",
+      "expiryDate": null,
+      "lastReviewed": "2026-08-06",
+      "sourceType": "Market report",
+      "driveUrl": null,
+      "downloadUrl": null,
+      "summary": "Template for source-backed market size, category trends, geography, assumptions and forecast uncertainty.",
+      "tags": [
+        "market",
+        "GABA",
+        "insight",
+        "forecast",
+        "sample"
+      ],
+      "status": "Documentation incomplete",
+      "currentOrArchive": "Current",
+      "modifiedTime": "2026-08-06T00:00:00.000Z",
+      "path": [
+        "08_Market_Insights",
+        "Global_Market_Insight_Template.pdf"
+      ],
+      "sample": true
+    }
+  ]
+}
