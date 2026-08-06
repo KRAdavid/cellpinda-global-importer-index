@@ -1,11 +1,11 @@
 {
   "name": "cellpinda-global-importer-index",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "validate": "node scripts/validate-index.mjs",
+    "validate": "node scripts/validate-index.mjs && node scripts/validate-human-grade.mjs",
     "sync:drive": "node scripts/sync-public-feed.mjs",
     "sync:drive-api": "node scripts/sync-drive.mjs",
     "check": "npm run validate && npm run test:sync-rules && npm run build",
