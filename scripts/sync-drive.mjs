@@ -125,11 +125,7 @@ function base64Url(value) {
 
 function parseServiceAccount() {
   const raw = env("GOOGLE_SERVICE_ACCOUNT_JSON") || env("GOOGLE_SERVICE_ACCOUNT_JSON_BASE64");
-  if (!raw) {
-    throw new Error(
-      "Missing GOOGLE_SERVICE_ACCOUNT_JSON. Store the complete service-account JSON as a GitHub Actions secret.",
-    );
-  }
+  if (!raw) return null;
 
   const candidates = [raw];
   try {
@@ -186,26 +182,47 @@ async function getAccessToken(serviceAccount) {
   return payload.access_token;
 }
 
-async function driveFetch(accessToken, pathname, params = {}) {
+async function createDriveAuth() {
+  const apiKey = env("GOOGLE_DRIVE_API_KEY");
+  if (apiKey) {
+    return { mode: "api-key", apiKey, accessToken: "" };
+  }
+
+  const serviceAccount = parseServiceAccount();
+  if (!serviceAccount) {
+    throw new Error(
+      "Missing GOOGLE_DRIVE_API_KEY. For a fully public Data Room, create a restricted Google Drive API key and store it as a GitHub Actions secret. GOOGLE_SERVICE_ACCOUNT_JSON remains available as a fallback.",
+    );
+  }
+  return {
+    mode: "service-account",
+    apiKey: "",
+    accessToken: await getAccessToken(serviceAccount),
+  };
+}
+
+async function driveFetch(auth, pathname, params = {}) {
   const url = new URL(`${DRIVE_API}${pathname}`);
   for (const [key, value] of Object.entries(params)) {
     if (value !== undefined && value !== null && value !== "") url.searchParams.set(key, String(value));
   }
-  const response = await fetch(url, {
-    headers: { authorization: `Bearer ${accessToken}` },
-  });
+  if (auth.apiKey) url.searchParams.set("key", auth.apiKey);
+  const headers = auth.accessToken ? { authorization: `Bearer ${auth.accessToken}` } : {};
+  const response = await fetch(url, { headers });
   if (!response.ok) {
     const detail = await response.text();
-    throw new Error(`Drive API ${pathname} failed (${response.status}): ${detail.slice(0, 800)}`);
+    const error = new Error(`Drive API ${pathname} failed (${response.status}): ${detail.slice(0, 800)}`);
+    error.status = response.status;
+    throw error;
   }
   return response.json();
 }
 
-async function listChildren(accessToken, parentId) {
+async function listChildren(auth, parentId) {
   const files = [];
   let pageToken = "";
   do {
-    const payload = await driveFetch(accessToken, "/files", {
+    const payload = await driveFetch(auth, "/files", {
       q: `'${parentId.replaceAll("'", "\\'")}' in parents and trashed = false`,
       pageSize: 1000,
       pageToken,
@@ -221,12 +238,12 @@ async function listChildren(accessToken, parentId) {
   return files;
 }
 
-async function collectTree(accessToken, rootFolderId) {
+async function collectTree(auth, rootFolderId) {
   const files = [];
   const folders = [{ id: rootFolderId, path: [] }];
   while (folders.length) {
     const folder = folders.shift();
-    const children = await listChildren(accessToken, folder.id);
+    const children = await listChildren(auth, folder.id);
     for (const child of children) {
       const path = [...folder.path, child.name];
       if (child.mimeType === FOLDER_MIME) {
@@ -239,10 +256,23 @@ async function collectTree(accessToken, rootFolderId) {
   return files;
 }
 
-async function isPublicFile(accessToken, fileId) {
+async function isPublicFile(auth, fileId) {
+  if (auth.mode === "api-key") {
+    try {
+      const payload = await driveFetch(auth, `/files/${encodeURIComponent(fileId)}`, {
+        supportsAllDrives: true,
+        fields: "id,trashed,webViewLink,webContentLink",
+      });
+      return Boolean(payload.id) && payload.trashed !== true;
+    } catch (error) {
+      if ([401, 403, 404].includes(error.status)) return false;
+      throw error;
+    }
+  }
+
   let pageToken = "";
   do {
-    const payload = await driveFetch(accessToken, `/files/${encodeURIComponent(fileId)}/permissions`, {
+    const payload = await driveFetch(auth, `/files/${encodeURIComponent(fileId)}/permissions`, {
       pageSize: 100,
       pageToken,
       supportsAllDrives: true,
@@ -793,17 +823,20 @@ async function main() {
   const rootFolderId = env("GOOGLE_DRIVE_ROOT_FOLDER_ID");
   if (!rootFolderId) throw new Error("Missing GOOGLE_DRIVE_ROOT_FOLDER_ID.");
 
-  const serviceAccount = parseServiceAccount();
-  const accessToken = await getAccessToken(serviceAccount);
-  console.log("Authenticated to Google Drive with the configured service account.");
+  const auth = await createDriveAuth();
+  console.log(
+    auth.mode === "api-key"
+      ? "Reading the fully public Google Drive Data Room with a restricted API key."
+      : "Authenticated to Google Drive with the configured service account fallback.",
+  );
 
-  const treeFiles = await collectTree(accessToken, rootFolderId);
+  const treeFiles = await collectTree(auth, rootFolderId);
   console.log(`Discovered ${treeFiles.length} non-folder file(s) below the configured root.`);
 
   const publicChecks = await mapLimit(treeFiles, 8, async (file) => {
     const targetId = file.mimeType === SHORTCUT_MIME ? file.shortcutDetails?.targetId : file.id;
     if (!targetId) return { file, public: false, reason: "Shortcut target is missing" };
-    return { file: { ...file, id: targetId }, public: await isPublicFile(accessToken, targetId) };
+    return { file: { ...file, id: targetId }, public: await isPublicFile(auth, targetId) };
   });
 
   const publicFiles = publicChecks.filter((item) => item.public).map((item) => item.file);
