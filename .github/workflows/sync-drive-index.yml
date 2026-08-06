@@ -22,7 +22,9 @@ concurrency:
 
 env:
   SYNC_BRANCH: automation/google-drive-index
-  GOOGLE_DRIVE_ROOT_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_ROOT_FOLDER_ID }}
+  # This folder ID is public configuration, not a credential. It points only to
+  # the approved public Cellpinda Global Data Room taxonomy.
+  GOOGLE_DRIVE_ROOT_FOLDER_ID: "1f7GoC25SGkIyRZa85qGdbmf0Rb0Pkde6"
   GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5-mini' }}
@@ -41,7 +43,7 @@ jobs:
         run: |
           set -euo pipefail
           if [[ -z "${GOOGLE_DRIVE_ROOT_FOLDER_ID}" ]]; then
-            echo "::error::Missing repository secret GOOGLE_DRIVE_ROOT_FOLDER_ID"
+            echo "::error::Missing public Google Drive root-folder configuration"
             exit 1
           fi
           if [[ -z "${GOOGLE_SERVICE_ACCOUNT_JSON}" ]]; then
