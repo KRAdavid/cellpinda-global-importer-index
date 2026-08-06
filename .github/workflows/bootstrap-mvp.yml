@@ -26,12 +26,13 @@ jobs:
           ref: feature/google-drive-index-v1
           fetch-depth: 0
 
-      - name: Reconstruct MVP archive
+      - name: Reconstruct and verify MVP archive
         shell: bash
         run: |
           set -euo pipefail
           test -f bootstrap/READY
-          cat bootstrap/part-* | base64 --decode > /tmp/cellpinda-mvp.zip
+          cat bootstrap/part-* | tr -d '[:space:]' | base64 --decode > /tmp/cellpinda-mvp.zip
+          echo "facc647f40bfa6e45edeb2d36e86ed263fe07d04f39316653e7ae1228e4aa5e3  /tmp/cellpinda-mvp.zip" | sha256sum -c -
           unzip -t /tmp/cellpinda-mvp.zip
 
       - name: Replace bootstrap payload with MVP source
