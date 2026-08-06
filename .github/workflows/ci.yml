@@ -33,10 +33,18 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
+      - name: Validate Apps Script feed source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp apps-script/Code.gs /tmp/cellpinda-drive-feed.js
+          node --check /tmp/cellpinda-drive-feed.js
+          node -e "JSON.parse(require('node:fs').readFileSync('apps-script/appsscript.json', 'utf8'))"
+
       - name: Validate document index
         run: npm run validate
 
-      - name: Test Drive classification rules
+      - name: Test public-feed classification rules
         run: npm run test:sync-rules
 
       - name: Build static site
