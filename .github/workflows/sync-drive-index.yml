@@ -2,8 +2,7 @@ name: Sync Google Drive Index
 
 on:
   schedule:
-    # 22:15 UTC = 07:15 Asia/Seoul on the following calendar day.
-    - cron: "15 22 * * *"
+    - cron: "15 22 * * *" # 07:15 Asia/Seoul
   workflow_dispatch:
     inputs:
       verify_public_links:
@@ -22,10 +21,8 @@ concurrency:
 
 env:
   SYNC_BRANCH: automation/google-drive-index
-  # This folder ID is public configuration, not a credential. It points only to
-  # the approved public Cellpinda Global Data Room taxonomy.
   GOOGLE_DRIVE_ROOT_FOLDER_ID: "1f7GoC25SGkIyRZa85qGdbmf0Rb0Pkde6"
-  GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+  GOOGLE_DRIVE_FEED_URL: ${{ vars.GOOGLE_DRIVE_FEED_URL }}
   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5-mini' }}
   OPENAI_MAX_DOCUMENTS: ${{ vars.OPENAI_MAX_DOCUMENTS || '20' }}
@@ -33,7 +30,7 @@ env:
 
 jobs:
   sync:
-    name: Read Drive, validate, build and update PR
+    name: Read Apps Script feed, validate, build and update PR
     runs-on: ubuntu-latest
     timeout-minutes: 25
 
@@ -42,12 +39,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ -z "${GOOGLE_DRIVE_ROOT_FOLDER_ID}" ]]; then
-            echo "::error::Missing public Google Drive root-folder configuration"
+          if [[ -z "${GOOGLE_DRIVE_FEED_URL}" ]]; then
+            echo "::error::Missing repository variable GOOGLE_DRIVE_FEED_URL"
             exit 1
           fi
-          if [[ -z "${GOOGLE_SERVICE_ACCOUNT_JSON}" ]]; then
-            echo "::error::Missing repository secret GOOGLE_SERVICE_ACCOUNT_JSON"
+          if [[ "${GOOGLE_DRIVE_FEED_URL}" != https://script.google.com/macros/s/*/exec* ]]; then
+            echo "::error::GOOGLE_DRIVE_FEED_URL must be an Apps Script /exec URL"
             exit 1
           fi
 
@@ -65,16 +62,16 @@ jobs:
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
-      - name: Build Drive index
+      - name: Build Drive index from public feed
         run: npm run sync:drive
 
       - name: Validate generated index
         run: npm run validate
 
-      - name: Test Drive classification rules
+      - name: Test feed classification rules
         run: npm run test:sync-rules
 
-      - name: Build static site before publishing changes
+      - name: Build static site
         run: npm run build
 
       - name: Detect generated changes
@@ -113,26 +110,11 @@ jobs:
           set -euo pipefail
           PR_URL="$(gh pr list --head "${SYNC_BRANCH}" --base main --state open --json url --jq '.[0].url // empty')"
           if [[ -z "${PR_URL}" ]]; then
-            cat > /tmp/pr-body.md <<'BODY'
-          ## Google Drive public-index synchronization
-
-          This automated pull request updates the generated public document index from the configured Google Drive data room.
-
-          ### Controls applied
-          - indexes only files with an `anyone` public permission
-          - excludes private and restricted files
-          - classifies records from the approved folder structure and optional Drive description metadata
-          - archives expired records when an expiry date is available
-          - validates the JSON schema and completes a production static build before pushing
-          - uses OpenAI metadata assistance only when `OPENAI_API_KEY` is configured
-
-          The original files remain in Google Drive. This PR changes generated metadata files only.
-          BODY
             PR_URL="$(gh pr create \
               --base main \
               --head "${SYNC_BRANCH}" \
               --title "chore: sync public Google Drive index" \
-              --body-file /tmp/pr-body.md)"
+              --body "Automated public metadata update from the Cellpinda Apps Script Drive feed. Original files remain in Google Drive.")"
           else
             gh pr edit "${PR_URL}" --title "chore: sync public Google Drive index"
           fi
