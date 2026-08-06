@@ -1,0 +1,57 @@
+name: Bootstrap Cellpinda Global Index MVP
+
+on:
+  push:
+    branches:
+      - feature/google-drive-index-v1
+    paths:
+      - bootstrap/READY
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bootstrap-cellpinda-global-index
+  cancel-in-progress: false
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: feature/google-drive-index-v1
+          fetch-depth: 0
+
+      - name: Reconstruct MVP archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f bootstrap/READY
+          cat bootstrap/part-* | base64 --decode > /tmp/cellpinda-mvp.zip
+          unzip -t /tmp/cellpinda-mvp.zip
+
+      - name: Replace bootstrap payload with MVP source
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/cellpinda-mvp
+          mkdir -p /tmp/cellpinda-mvp
+          unzip -q /tmp/cellpinda-mvp.zip -d /tmp/cellpinda-mvp
+          test -f /tmp/cellpinda-mvp/cellpinda-global-importer-index/package.json
+          rsync -a --delete \
+            --exclude='.git/' \
+            /tmp/cellpinda-mvp/cellpinda-global-importer-index/ ./
+
+      - name: Commit complete MVP
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "cellpinda-index-bootstrap"
+          git config user.email "cellpinda-index-bootstrap@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: build Google Drive importer index MVP"
+          git push origin HEAD:feature/google-drive-index-v1
