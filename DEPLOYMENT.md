@@ -30,7 +30,7 @@ The deployment is ready only when:
 6. Node.js version: 24.
 7. Deploy the `main` branch.
 
-The public site itself does not need Google or OpenAI secrets. Those secrets stay in GitHub Actions because synchronization writes the generated JSON through Pull Requests.
+The public site does not need Google credentials. The public Apps Script `/exec` URL is stored as the GitHub Repository variable `GOOGLE_DRIVE_FEED_URL`; an optional `OPENAI_API_KEY` remains a GitHub Secret.
 
 Recommended controls:
 
@@ -55,6 +55,7 @@ No Worker runtime is required for the MVP because all routes are statically gene
 
 ```text
 Drive file added or changed
+→ public Apps Script JSON feed reflects the Drive state
 → scheduled/manual Sync Google Drive Index action
 → generated JSON changes
 → automation Pull Request
@@ -99,6 +100,7 @@ Check:
 ## Production launch checklist
 
 - [ ] Replace the temporary importer-contact URL in `content/site-content.json`
+- [ ] Deploy the Apps Script feed and register `GOOGLE_DRIVE_FEED_URL`
 - [ ] Run a live Drive synchronization
 - [ ] Confirm sample records are no longer the only records
 - [ ] Confirm public files open in a private browser window
@@ -127,5 +129,6 @@ Do not permanently patch generated JSON by hand; the next synchronization would 
 | Node version error | Set Node.js 24 in the host settings |
 | JSON data missing | Confirm `public/data/*.json` is committed and present in the build artifact |
 | Route 404 | Confirm trailing-slash/static output settings and deploy the entire `out/` directory |
-| Stale site after Drive update | Check the sync PR was merged and the host redeployed `main` |
-| Private file exposed | Immediately remove its public Drive permission, run sync, merge the removal PR, and review access logs |
+| Stale site after Drive update | Check the Apps Script feed, synchronization PR and hosting redeployment |
+| Feed configuration missing | Register the Apps Script `/exec` URL as the `GOOGLE_DRIVE_FEED_URL` Repository variable |
+| Private file exposed | Move it outside the public Data Room, run sync, merge the removal PR and review access logs |
