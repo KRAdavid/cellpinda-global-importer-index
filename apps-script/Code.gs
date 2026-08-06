@@ -1,15 +1,14 @@
 /**
  * Cellpinda Global Data Room public JSON feed.
  *
- * This Apps Script uses the built-in DriveApp service and therefore does not
- * require the user to create or manage a Google Cloud Console project.
- * Deploy it as a web app that executes as the deploying user and is accessible
- * to anyone. GitHub Actions reads the resulting /exec URL once per day.
+ * This Apps Script uses built-in Google services and does not require a
+ * user-managed Google Cloud Console project. Deploy as a web app that executes
+ * as the deploying user and is accessible to anyone.
  */
 const CONFIG = Object.freeze({
   ROOT_FOLDER_ID: '1f7GoC25SGkIyRZa85qGdbmf0Rb0Pkde6',
   ROOT_FOLDER_NAME: 'Cellpinda Global Data Room',
-  SCHEMA_VERSION: '1.0.0',
+  SCHEMA_VERSION: '1.1.0',
   CACHE_SECONDS: 300,
   MAX_FILES: 2000,
   EXCLUDED_FOLDER_NAMES: Object.freeze([
@@ -33,6 +32,7 @@ const GOOGLE_MIME = Object.freeze({
 
 function doGet(e) {
   try {
+    if (typeof routePublicFeed_ === 'function') return routePublicFeed_(e);
     const refresh = e && e.parameter && String(e.parameter.refresh || '') !== '';
     return jsonOutput_(buildFeed_(refresh));
   } catch (error) {
@@ -164,9 +164,7 @@ function fileRecord_(file, path, directPublic, inheritedPublic) {
       shortcutTargetMimeType = file.getTargetMimeType();
       if (shortcutTargetId) id = shortcutTargetId;
       if (shortcutTargetMimeType) mimeType = shortcutTargetMimeType;
-    } catch (error) {
-      // Keep the shortcut record when target metadata cannot be resolved.
-    }
+    } catch (error) {}
   }
 
   const resourceKey = safeCall_(function () { return file.getResourceKey(); }, '');
