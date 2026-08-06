@@ -6,6 +6,11 @@ on:
       - feature/google-drive-index-v1
     paths:
       - bootstrap/READY
+  pull_request:
+    branches:
+      - main
+    paths:
+      - bootstrap/READY
 
 permissions:
   contents: write
