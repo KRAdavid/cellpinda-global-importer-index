@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AudienceIndex } from "@/components/AudienceIndex";
+import "./human-grade.css";
 
 export const metadata: Metadata = {
   title: "Human-Grade GABA Intelligence",
