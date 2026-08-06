@@ -7,6 +7,12 @@ on:
     paths:
       - bootstrap/public-api-key-patch/**
       - .github/workflows/apply-public-drive-api-key.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - bootstrap/public-api-key-patch/**
+      - .github/workflows/apply-public-drive-api-key.yml
 
 permissions:
   contents: write
