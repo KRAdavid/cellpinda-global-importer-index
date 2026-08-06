@@ -5,13 +5,13 @@ on:
     branches:
       - feature/public-drive-api-key-sync
     paths:
-      - bootstrap/public-api-key-patch/**
+      - bootstrap/apply_public_drive_api_key.py
       - .github/workflows/apply-public-drive-api-key.yml
   pull_request:
     branches:
       - main
     paths:
-      - bootstrap/public-api-key-patch/**
+      - bootstrap/apply_public_drive_api_key.py
       - .github/workflows/apply-public-drive-api-key.yml
 
 permissions:
@@ -30,14 +30,12 @@ jobs:
           ref: feature/public-drive-api-key-sync
           fetch-depth: 0
 
-      - name: Reconstruct and apply patch
+      - name: Apply and validate source patch
         shell: bash
         run: |
           set -euo pipefail
-          test -d bootstrap/public-api-key-patch
-          cat bootstrap/public-api-key-patch/part-* | base64 --decode > /tmp/public-drive-api-key.patch
-          git apply --check /tmp/public-drive-api-key.patch
-          git apply /tmp/public-drive-api-key.patch
+          test -f bootstrap/apply_public_drive_api_key.py
+          python bootstrap/apply_public_drive_api_key.py
           node --check scripts/sync-drive.mjs
           node scripts/sync-drive.mjs --self-test
 
@@ -45,7 +43,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rm -rf bootstrap/public-api-key-patch
+          rm -rf bootstrap/public-api-key-patch bootstrap/apply_public_drive_api_key.py
           git config user.name "cellpinda-index-bootstrap"
           git config user.email "cellpinda-index-bootstrap@users.noreply.github.com"
           git add -A
