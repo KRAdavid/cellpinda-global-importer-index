@@ -1,0 +1,387 @@
+{
+  "brand": {
+    "name": "Cellpinda GABA Global Web Index",
+    "shortName": "Cellpinda Global Index",
+    "tagline": "Evidence, quality and regulatory intelligence for global importers."
+  },
+  "navigation": [
+    {
+      "slug": "product-overview",
+      "label": "Product Overview",
+      "shortLabel": "Product",
+      "description": "Identity, specifications and commercial context.",
+      "icon": "package"
+    },
+    {
+      "slug": "manufacturing-quality",
+      "label": "Manufacturing & Quality",
+      "shortLabel": "Quality",
+      "description": "Process, certificates and quality-system records.",
+      "icon": "shield"
+    },
+    {
+      "slug": "scientific-evidence",
+      "label": "Scientific Evidence",
+      "shortLabel": "Evidence",
+      "description": "Human, preclinical and mechanistic evidence records.",
+      "icon": "science"
+    },
+    {
+      "slug": "global-regulatory-index",
+      "label": "Global Regulatory Index",
+      "shortLabel": "Regulatory",
+      "description": "Country and region-specific pathway tracking.",
+      "icon": "globe"
+    },
+    {
+      "slug": "patents",
+      "label": "Patents",
+      "shortLabel": "Patents",
+      "description": "Patent documents and technology-position records.",
+      "icon": "file"
+    },
+    {
+      "slug": "case-studies",
+      "label": "Case Studies",
+      "shortLabel": "Cases",
+      "description": "Commercial, formulation and market-entry examples.",
+      "icon": "chart"
+    },
+    {
+      "slug": "market-insights",
+      "label": "Market Insights",
+      "shortLabel": "Market",
+      "description": "Market reports, category signals and buyer intelligence.",
+      "icon": "chart"
+    },
+    {
+      "slug": "document-center",
+      "label": "Document Center",
+      "shortLabel": "Documents",
+      "description": "Filter and download the complete public document set.",
+      "icon": "file"
+    },
+    {
+      "slug": "latest-updates",
+      "label": "Latest Updates",
+      "shortLabel": "Updates",
+      "description": "Recently added or revised records.",
+      "icon": "clock"
+    },
+    {
+      "slug": "global-search",
+      "label": "Global Search",
+      "shortLabel": "Search",
+      "description": "Search across titles, summaries, countries and tags.",
+      "icon": "search"
+    }
+  ],
+  "hero": {
+    "title": "Cellpinda GABA 100%",
+    "definition": "A fermentation-derived gamma-aminobutyric acid ingredient manufactured in the Republic of Korea.",
+    "description": "Explore current product, manufacturing, quality, scientific, regulatory and commercial documents from one controlled public index.",
+    "primaryAction": "Explore documents",
+    "secondaryAction": "Importer inquiry",
+    "searchPlaceholder": "Search certificates, evidence, countries, patents or files"
+  },
+  "product": {
+    "name": "Cellpinda GABA 100%",
+    "facts": [
+      {
+        "label": "Substance",
+        "value": "Gamma-Aminobutyric Acid"
+      },
+      {
+        "label": "Common name",
+        "value": "GABA"
+      },
+      {
+        "label": "Chemical name",
+        "value": "4-aminobutanoic acid"
+      },
+      {
+        "label": "CAS",
+        "value": "56-12-2"
+      },
+      {
+        "label": "Molecular formula",
+        "value": "C4H9NO2"
+      },
+      {
+        "label": "Molecular weight",
+        "value": "approximately 103.12 g/mol"
+      },
+      {
+        "label": "Origin",
+        "value": "Republic of Korea"
+      },
+      {
+        "label": "Manufacturer",
+        "value": "MH2 Biochemical Co., Ltd."
+      },
+      {
+        "label": "Distributor",
+        "value": "Cellpinda Co., Ltd."
+      }
+    ],
+    "qualificationNote": "Final specifications, legal classification, permitted use and import conditions must be confirmed against current documents and local authority requirements."
+  },
+  "manufacturing": {
+    "summary": "A controlled fermentation, purification and crystallization sequence designed to produce a consistent GABA ingredient.",
+    "steps": [
+      "Lactobacillus brevis cultivation",
+      "L-glutamic acid fermentation",
+      "Purification",
+      "Concentration",
+      "Microfiltration",
+      "Alcohol crystallization",
+      "Centrifugation",
+      "Drying",
+      "Screening",
+      "Packaging"
+    ]
+  },
+  "certificates": [
+    {
+      "name": "FSSC 22000",
+      "version": "Version 6.0",
+      "certificateNumber": "25-FSSC-0342",
+      "validUntil": "2028-07-02",
+      "status": "Current"
+    },
+    {
+      "name": "HACCP",
+      "version": "",
+      "certificateNumber": "",
+      "validUntil": "2027-01-11",
+      "status": "Current"
+    },
+    {
+      "name": "ISO 22000",
+      "version": "",
+      "certificateNumber": "",
+      "validUntil": "2028-08-18",
+      "status": "Current"
+    },
+    {
+      "name": "Halal",
+      "version": "",
+      "certificateNumber": "",
+      "validUntil": null,
+      "status": "Renewal required"
+    },
+    {
+      "name": "Kosher",
+      "version": "",
+      "certificateNumber": "",
+      "validUntil": null,
+      "status": "Renewal required"
+    }
+  ],
+  "evidence": {
+    "statuses": [
+      {
+        "name": "Supportive",
+        "definition": "The reported result supports the stated research question within the study's design and limitations."
+      },
+      {
+        "name": "Mixed",
+        "definition": "Results differ by endpoint, subgroup, time point or study."
+      },
+      {
+        "name": "Null",
+        "definition": "The study did not report a statistically or clinically meaningful effect for the assessed endpoint."
+      },
+      {
+        "name": "Indirect",
+        "definition": "The evidence is mechanistic, preclinical, uses a different ingredient, or is otherwise not directly transferable."
+      },
+      {
+        "name": "Insufficient",
+        "definition": "Evidence is too limited, incomplete or low-certainty for a supported conclusion."
+      }
+    ],
+    "directnessLevels": [
+      "Direct product evidence",
+      "Comparable GABA evidence",
+      "Mechanistic or indirect evidence",
+      "Not assessed"
+    ],
+    "disclaimer": "Evidence summaries are navigation aids, not medical advice or claim authorization. Review the original paper and applicable local rules before use."
+  },
+  "regulatory": {
+    "statuses": [
+      {
+        "name": "Official pathway identified",
+        "definition": "An official legal or administrative route has been located; product-level applicability still requires verification."
+      },
+      {
+        "name": "Product-specific review required",
+        "definition": "The route depends on the exact product, specification, intended use, claims or dossier."
+      },
+      {
+        "name": "Local confirmation required",
+        "definition": "A qualified local importer, advisor or competent authority should confirm the current position."
+      },
+      {
+        "name": "Documentation incomplete",
+        "definition": "Required evidence or administrative documents are missing or outdated."
+      },
+      {
+        "name": "Not yet reviewed",
+        "definition": "No completed Cellpinda review is recorded in this index."
+      }
+    ],
+    "countries": [
+      {
+        "name": "United States",
+        "code": "USA",
+        "status": "Not yet reviewed"
+      },
+      {
+        "name": "Canada",
+        "code": "Canada",
+        "status": "Not yet reviewed"
+      },
+      {
+        "name": "European Union",
+        "code": "EU",
+        "status": "Not yet reviewed"
+      },
+      {
+        "name": "Japan",
+        "code": "Japan",
+        "status": "Not yet reviewed"
+      },
+      {
+        "name": "China",
+        "code": "China",
+        "status": "Not yet reviewed"
+      },
+      {
+        "name": "ASEAN",
+        "code": "ASEAN",
+        "status": "Not yet reviewed"
+      }
+    ],
+    "disclaimer": "This index does not state that Cellpinda GABA is approved, permitted or importable in any market. Current product-specific and local confirmation is required."
+  },
+  "sections": {
+    "product-overview": {
+      "title": "Product Overview",
+      "intro": "Core identity, commercial context and controlled product records for importer qualification.",
+      "guidance": [
+        "Use the latest specification and certificate files.",
+        "Confirm intended use, dose form and target market.",
+        "Treat website summaries as navigation, not the controlling document."
+      ]
+    },
+    "manufacturing-quality": {
+      "title": "Manufacturing & Quality",
+      "intro": "Manufacturing flow, quality-system status and current certificate visibility in one review path.",
+      "guidance": [
+        "Expired documents are automatically classified as Archive when an expiry date is available.",
+        "Renewal-required certificates are not presented as current.",
+        "Request current originals before supplier approval."
+      ]
+    },
+    "scientific-evidence": {
+      "title": "Scientific Evidence",
+      "intro": "Structured evidence records with study design, population, dose, duration, findings, limitations and directness.",
+      "guidance": [
+        "Read the original paper before making a technical or commercial decision.",
+        "Do not transfer findings from a different ingredient without a directness assessment.",
+        "Evidence status does not equal an authorized health claim."
+      ]
+    },
+    "global-regulatory-index": {
+      "title": "Global Regulatory Index",
+      "intro": "Country and region-level pathway tracking with explicit uncertainty and local-confirmation controls.",
+      "guidance": [
+        "Regulatory status changes over time.",
+        "Product specifications and proposed claims can change the applicable route.",
+        "A local importer or qualified advisor should validate the final position."
+      ]
+    },
+    "patents": {
+      "title": "Patents",
+      "intro": "Patent files, technology summaries and portfolio references relevant to Cellpinda GABA.",
+      "guidance": [
+        "Patent status should be checked in the relevant official register.",
+        "A patent document does not establish freedom to operate."
+      ]
+    },
+    "case-studies": {
+      "title": "Case Studies",
+      "intro": "Formulation, commercialization and importer-use examples with clearly separated facts and assumptions.",
+      "guidance": [
+        "Results from one market or application may not transfer to another.",
+        "Commercial examples must not be presented as clinical evidence."
+      ]
+    },
+    "market-insights": {
+      "title": "Market Insights",
+      "intro": "Category reports, market signals and buyer intelligence for opportunity assessment.",
+      "guidance": [
+        "Record source, publication date and geography.",
+        "Separate measured data from estimates or forecasts."
+      ]
+    },
+    "document-center": {
+      "title": "Document Center",
+      "intro": "The complete public Google Drive index with filters for category, country, status, date and evidence classification.",
+      "guidance": [
+        "Only publicly shared Drive files are indexed.",
+        "Drive remains the source of truth for the original file."
+      ]
+    },
+    "latest-updates": {
+      "title": "Latest Updates",
+      "intro": "Recently added or modified documents, sorted by the latest available update date.",
+      "guidance": [
+        "A modified date does not necessarily mean the underlying conclusion changed.",
+        "Review version and issue date before relying on a file."
+      ]
+    },
+    "global-search": {
+      "title": "Global Search",
+      "intro": "Search the entire index across titles, summaries, tags, countries, versions and document paths.",
+      "guidance": [
+        "Search results depend on available metadata.",
+        "Add a concise Drive description to improve discovery."
+      ]
+    },
+    "system-status": {
+      "title": "Index Status",
+      "intro": "Automation health, metadata completeness, excluded private files and link-quality signals.",
+      "guidance": [
+        "Resolve missing metadata in Google Drive, not in generated JSON.",
+        "The next successful sync will regenerate the status report."
+      ]
+    }
+  },
+  "labels": {
+    "latest": "Latest additions",
+    "certificates": "Certificate status",
+    "evidence": "Latest evidence records",
+    "regulatory": "Regulatory review map",
+    "downloads": "Popular / featured downloads",
+    "categories": "Explore by category",
+    "current": "Current",
+    "archive": "Archive",
+    "sample": "Sample data",
+    "openDrive": "Open in Drive",
+    "download": "Download",
+    "linkPending": "Drive link pending",
+    "noResults": "No matching public documents were found."
+  },
+  "contact": {
+    "label": "Importer inquiry",
+    "href": "https://www.instagram.com/cellpinda_co_ltd/",
+    "note": "Replace this temporary contact destination with the official B2B inquiry channel before production launch."
+  },
+  "footer": {
+    "sourceNote": "Google Drive is the source of truth. The web index contains public metadata and links only.",
+    "policyNote": "No regulatory approval, efficacy or importability is implied by inclusion in this index."
+  }
+}

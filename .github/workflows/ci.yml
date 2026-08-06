@@ -1,0 +1,59 @@
+name: Validate and Build
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - "feature/**"
+      - "automation/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Validate static index and build site
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Validate document index
+        run: npm run validate
+
+      - name: Test Drive classification rules
+        run: npm run test:sync-rules
+
+      - name: Build static site
+        run: npm run build
+
+      - name: Verify static export
+        run: |
+          test -f out/index.html
+          test -f out/data/index.json
+          test -f out/data/status.json
+          test -f out/document-center/index.html
+          echo "Static export verified."
+
+      - name: Upload static build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cellpinda-global-index-static-site
+          path: out
+          if-no-files-found: error
+          retention-days: 7

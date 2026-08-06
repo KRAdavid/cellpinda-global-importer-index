@@ -1,0 +1,155 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-08-06T00:00:00.000Z",
+  "sourceMode": "sample",
+  "healthy": true,
+  "documentCount": 15,
+  "currentCount": 13,
+  "archiveCount": 2,
+  "publicFilesIndexed": 0,
+  "privateFilesExcluded": 0,
+  "missingMetadata": [
+    {
+      "id": "sample-product-specification",
+      "title": "Cellpinda GABA 100% Product Specification — Sample Record",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-manufacturing-flow",
+      "title": "Manufacturing Process Flow — Sample Record",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-fssc-22000",
+      "title": "FSSC 22000 Version 6.0 Certificate",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-haccp",
+      "title": "HACCP Certificate",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-iso-22000",
+      "title": "ISO 22000 Certificate",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-halal-renewal",
+      "title": "Halal Certificate — Renewal Required",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-kosher-renewal",
+      "title": "Kosher Certificate — Renewal Required",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-evidence-sleep",
+      "title": "Sleep Evidence Record Template",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-evidence-stress",
+      "title": "Stress Evidence Record Template",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-regulatory-usa",
+      "title": "United States Regulatory Review Placeholder",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-regulatory-canada",
+      "title": "Canada Regulatory Review Placeholder",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-regulatory-eu",
+      "title": "European Union Regulatory Review Placeholder",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-patent-index",
+      "title": "Patent Portfolio Index — Sample Record",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-case-study",
+      "title": "Importer Case Study Template",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    },
+    {
+      "id": "sample-market-insight",
+      "title": "Global GABA Market Insight Template",
+      "fields": [
+        "driveUrl",
+        "downloadUrl"
+      ]
+    }
+  ],
+  "brokenLinks": [],
+  "linkChecks": {
+    "mode": "not-run-in-sample",
+    "checked": 0,
+    "healthy": 0,
+    "broken": 0
+  },
+  "aiClassification": {
+    "enabled": false,
+    "processed": 0,
+    "model": null
+  },
+  "changeSummary": {
+    "added": 15,
+    "modified": 0,
+    "deleted": 0
+  },
+  "warnings": [
+    "Google Drive credentials are not configured; the dashboard is using explicit sample records.",
+    "Sample document links are intentionally disabled and do not represent public source files."
+  ],
+  "requiredAction": "Configure Google Drive secrets and run the Sync Google Drive Index workflow."
+}
