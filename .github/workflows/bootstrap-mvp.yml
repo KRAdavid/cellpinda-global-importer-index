@@ -5,13 +5,6 @@ on:
     branches:
       - feature/google-drive-index-v1
     paths:
-      - bootstrap/READY
-  pull_request:
-    branches:
-      - main
-    paths:
-      - bootstrap/READY
-      - bootstrap/part-*
       - .github/workflows/bootstrap-mvp.yml
 
 permissions:
@@ -19,7 +12,7 @@ permissions:
 
 concurrency:
   group: bootstrap-cellpinda-global-index
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   bootstrap:
@@ -73,9 +66,10 @@ jobs:
           test -f /tmp/cellpinda-mvp/cellpinda-global-importer-index/package.json
           rsync -a --delete \
             --exclude='.git/' \
+            --exclude='.github/workflows/' \
             /tmp/cellpinda-mvp/cellpinda-global-importer-index/ ./
 
-      - name: Commit complete MVP
+      - name: Commit complete MVP source
         shell: bash
         run: |
           set -euo pipefail
