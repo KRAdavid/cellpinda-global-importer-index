@@ -77,11 +77,17 @@ jobs:
 
           path = Path("tests/guided-ai.spec.ts")
           text = path.read_text(encoding="utf-8")
-          old = '  await expect(page.getByText(/Canada/).first()).toBeVisible();'
-          new = '  await expect(page.getByLabel("Country")).toHaveValue("Canada");'
-          if old not in text:
-              raise SystemExit("Expected Playwright country assertion was not found.")
-          path.write_text(text.replace(old, new), encoding="utf-8")
+          replacements = {
+              '  await expect(page.getByText(/Canada/).first()).toBeVisible();':
+                  '  await expect(page.getByLabel("Country")).toHaveValue("Canada");',
+              '  await expect(page.getByLabel("Language")).toHaveValue("Korean");':
+                  '  await expect(page.getByLabel("언어")).toHaveValue("Korean");',
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f"Expected Playwright assertion was not found: {old}")
+              text = text.replace(old, new)
+          path.write_text(text, encoding="utf-8")
           PY
 
           rm -f .automation/ask-guided-ai.part.*
