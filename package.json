@@ -1,11 +1,15 @@
 {
   "name": "cellpinda-global-importer-index",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run generate:search-index && npm run validate:guided-ai && npm run test:guided-ai && next build",
     "validate": "node scripts/validate-index.mjs",
+    "validate:guided-ai": "node scripts/validate-guided-ai.mjs",
+    "generate:search-index": "node scripts/build-search-index.mjs",
+    "test:guided-ai": "node scripts/test-guided-ai.mjs",
+    "test:e2e": "playwright test",
     "sync:drive": "node scripts/sync-public-feed.mjs",
     "sync:drive-api": "node scripts/sync-drive.mjs",
     "check": "npm run validate && npm run test:sync-rules && npm run build",
@@ -18,6 +22,7 @@
     "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@playwright/test": "1.55.0",
     "@types/node": "24.0.0",
     "@types/react": "19.2.0",
     "@types/react-dom": "19.2.0",
