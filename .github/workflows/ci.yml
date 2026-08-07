@@ -17,9 +17,9 @@ concurrency:
 
 jobs:
   build:
-    name: Validate static index and build site
+    name: Validate, test and build static site
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     steps:
       - name: Check out repository
@@ -41,21 +41,29 @@ jobs:
           node --check /tmp/cellpinda-drive-feed.js
           node -e "JSON.parse(require('node:fs').readFileSync('apps-script/appsscript.json', 'utf8'))"
 
-      - name: Validate document index
+      - name: Validate source document index
         run: npm run validate
 
       - name: Test public-feed classification rules
         run: npm run test:sync-rules
 
-      - name: Build static site
+      - name: Build and validate Guided AI static site
         run: npm run build
+
+      - name: Install Chromium for responsive browser tests
+        run: npx playwright install --with-deps chromium
+
+      - name: Test desktop, mobile and Guided AI interactions
+        run: npm run test:e2e
 
       - name: Verify static export
         run: |
           test -f out/index.html
           test -f out/data/index.json
+          test -f out/data/search-index.json
           test -f out/data/status.json
           test -f out/document-center/index.html
+          test -f out/ask-cellpinda/index.html
           echo "Static export verified."
 
       - name: Upload static build artifact

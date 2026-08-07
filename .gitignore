@@ -24,6 +24,8 @@ Thumbs.db
 
 # test / coverage
 /coverage/
+/test-results/
+/playwright-report/
 
 # temporary Drive sync output
 .tmp/

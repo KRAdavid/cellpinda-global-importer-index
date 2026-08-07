@@ -65,13 +65,13 @@ jobs:
       - name: Build Drive index from public feed
         run: npm run sync:drive
 
-      - name: Validate generated index
+      - name: Validate generated source index
         run: npm run validate
 
       - name: Test feed classification rules
         run: npm run test:sync-rules
 
-      - name: Build static site
+      - name: Build static site and Guided AI search index
         run: npm run build
 
       - name: Detect generated changes
@@ -79,12 +79,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if git diff --quiet -- public/data/index.json public/data/status.json; then
+          if git diff --quiet -- public/data/index.json public/data/status.json public/data/search-index.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
             echo "No generated index changes detected."
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
-            git diff --stat -- public/data/index.json public/data/status.json
+            git diff --stat -- public/data/index.json public/data/status.json public/data/search-index.json
           fi
 
       - name: Commit and push automation branch
@@ -96,7 +96,7 @@ jobs:
           git config user.email "cellpinda-index-bot@users.noreply.github.com"
           git fetch origin "${SYNC_BRANCH}" || true
           git checkout -B "${SYNC_BRANCH}"
-          git add public/data/index.json public/data/status.json
+          git add public/data/index.json public/data/status.json public/data/search-index.json
           git commit -m "chore: sync public Google Drive index"
           git push --force-with-lease --set-upstream origin "${SYNC_BRANCH}"
 
@@ -114,7 +114,7 @@ jobs:
               --base main \
               --head "${SYNC_BRANCH}" \
               --title "chore: sync public Google Drive index" \
-              --body "Automated public metadata update from the Cellpinda Apps Script Drive feed. Original files remain in Google Drive.")"
+              --body "Automated public metadata update from the Cellpinda Apps Script Drive feed. Original files remain in Google Drive, and search-index.json is regenerated for Ask Cellpinda.")"
           else
             gh pr edit "${PR_URL}" --title "chore: sync public Google Drive index"
           fi
