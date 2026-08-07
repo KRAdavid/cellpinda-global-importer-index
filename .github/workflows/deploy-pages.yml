@@ -1,0 +1,104 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+env:
+  PAGES_BASE_PATH: /cellpinda-global-importer-index
+  NEXT_TELEMETRY_DISABLED: "1"
+
+jobs:
+  build:
+    name: Build GitHub Pages artifact
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Validate Apps Script feed source
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp apps-script/Code.gs /tmp/cellpinda-drive-feed.js
+          node --check /tmp/cellpinda-drive-feed.js
+          node -e "JSON.parse(require('node:fs').readFileSync('apps-script/appsscript.json', 'utf8'))"
+
+      - name: Validate indexes and build static site
+        run: |
+          npm run validate
+          npm run test:sync-rules
+          npm run build
+
+      - name: Verify GitHub Pages subpath export
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f out/index.html
+          test -f out/ask-cellpinda/index.html
+          test -f out/data/search-index.json
+          grep -q '/cellpinda-global-importer-index/_next/' out/index.html
+
+          mkdir -p /tmp/pages-root/cellpinda-global-importer-index
+          cp -a out/. /tmp/pages-root/cellpinda-global-importer-index/
+          python3 -m http.server 4174 --directory /tmp/pages-root >/tmp/pages-smoke.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+
+          for attempt in 1 2 3 4 5; do
+            if curl --fail --silent --show-error \
+              http://127.0.0.1:4174/cellpinda-global-importer-index/ >/dev/null; then
+              break
+            fi
+            sleep 1
+          done
+
+          curl --fail --silent --show-error \
+            http://127.0.0.1:4174/cellpinda-global-importer-index/ask-cellpinda/ >/dev/null
+          curl --fail --silent --show-error \
+            http://127.0.0.1:4174/cellpinda-global-importer-index/data/search-index.json >/dev/null
+          touch out/.nojekyll
+          echo "GitHub Pages subpath export verified."
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./out
+
+  deploy:
+    name: Deploy public site
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
