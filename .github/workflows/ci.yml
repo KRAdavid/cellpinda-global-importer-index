@@ -144,6 +144,9 @@ jobs:
           git config user.name "cellpinda-development-bot"
           git config user.email "cellpinda-development-bot@users.noreply.github.com"
           git add -A
+          git reset -- .github/workflows/ci.yml
+          git reset -- .github/workflows/sync-drive-index.yml
+          git reset -- .github/workflows/apply-ask-cellpinda.yml
           git diff --cached --check
           git commit -m "feat: add Ask Cellpinda Guided AI v1"
           git push origin HEAD:feature/ask-cellpinda-guided-ai-v1
