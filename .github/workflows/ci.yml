@@ -33,13 +33,27 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ ! -f .automation/ask-guided-ai.part.00 ]]; then
+          if [[ ! -f .automation/ask-guided-ai.part.01 ]]; then
             echo "applied=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
+          declare -A HEX_EXPECTED=(
+            [0]="50403547c87600b6b2428897c567daeac779729005f5d6a515962938a564d493"
+            [1]="d0aca1bf1b2d5254dbafe4a5b99334f8822c73e4b503037e0e76eb2d08a7ccec"
+            [2]="34a07fbff1e623eb53a5dfe8b764e1a32281c5f6e9ea6b3d5c88399c9d029e9c"
+            [3]="33b66a5b464f188487938fe460e91f02a144a09d5c63eea7028b4f846123c471"
+          )
+
+          for segment in 0 1 2 3; do
+            tr -d '[:space:]' < ".automation/ask-guided-ai.part.00.hex.${segment}" > "/tmp/part00.hex.${segment}"
+            echo "${HEX_EXPECTED[$segment]}  /tmp/part00.hex.${segment}" | sha256sum -c -
+          done
+
+          cat /tmp/part00.hex.? | xxd -r -p > /tmp/part.00
+          echo "4bbaf2da1d7800e262fea8a7a447fd04ba476248340e5352a0dc5d2921510798  /tmp/part.00" | sha256sum -c -
+
           declare -A EXPECTED=(
-            [00]="4bbaf2da1d7800e262fea8a7a447fd04ba476248340e5352a0dc5d2921510798"
             [01]="06c6ce1acbe05b1a2822e12ad2cb10a2764e7dc670e23b135841b4399def6b15"
             [02]="37ca1b126ab8faff2d98b7851226508ad28aa8c776bc5d6d94e7b7e724fc0de6"
             [03]="2c875c330a015479ea76d5f5dc5b70163f66583297406957f33ec2182d145a19"
@@ -48,7 +62,7 @@ jobs:
             [06]="e59f85edc786b4e00ba938d50b3762202e8fd62974eec46523ff59130803f076"
           )
 
-          for part in 00 01 02 03 04 05 06; do
+          for part in 01 02 03 04 05 06; do
             tr -d '[:space:]' < ".automation/ask-guided-ai.part.${part}" > "/tmp/part.${part}"
             echo "${EXPECTED[$part]}  /tmp/part.${part}" | sha256sum -c -
           done
