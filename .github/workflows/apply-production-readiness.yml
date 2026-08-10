@@ -6,6 +6,11 @@ on:
       - feature/public-site-production-readiness-v1
     paths:
       - ".automation/apply-production-readiness.trigger"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".automation/apply-production-readiness.trigger"
 
 permissions:
   contents: write
@@ -27,9 +32,16 @@ jobs:
           fetch-depth: 0
 
       - name: Verify and extract production-readiness source bundle
+        id: payload
         shell: bash
         run: |
           set -euo pipefail
+
+          if [[ ! -f .automation/apply-production-readiness.trigger ]]; then
+            echo "applied=false" >> "$GITHUB_OUTPUT"
+            echo "Production-readiness payload was already applied."
+            exit 0
+          fi
 
           declare -A EXPECTED=(
             [00]="aa5138178797413aae53c806c56fd092d26352dc496a2f0dfb5b174dc852681f"
@@ -58,16 +70,20 @@ jobs:
           rm -f public/robots.txt
           rm -f .automation/production-source.part.*
           rm -f .automation/apply-production-readiness.trigger
+          echo "applied=true" >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
+        if: steps.payload.outputs.applied == 'true'
         uses: actions/setup-node@v6
         with:
           node-version: 24
 
       - name: Install dependencies
+        if: steps.payload.outputs.applied == 'true'
         run: npm install --no-package-lock --no-audit --no-fund
 
       - name: Validate Apps Script feed source
+        if: steps.payload.outputs.applied == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -76,24 +92,31 @@ jobs:
           node -e "JSON.parse(require('node:fs').readFileSync('apps-script/appsscript.json', 'utf8'))"
 
       - name: Validate source document index
+        if: steps.payload.outputs.applied == 'true'
         run: npm run validate
 
       - name: Test public-feed classification rules
+        if: steps.payload.outputs.applied == 'true'
         run: npm run test:sync-rules
 
       - name: Test final-site health-check rules
+        if: steps.payload.outputs.applied == 'true'
         run: npm run test:public-site
 
       - name: Build production-readiness static site
+        if: steps.payload.outputs.applied == 'true'
         run: npm run build
 
       - name: Install Chromium for responsive browser tests
+        if: steps.payload.outputs.applied == 'true'
         run: npx playwright install --with-deps chromium
 
       - name: Test desktop, mobile, inquiry and Guided AI interactions
+        if: steps.payload.outputs.applied == 'true'
         run: npm run test:e2e
 
       - name: Verify static export
+        if: steps.payload.outputs.applied == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -115,6 +138,7 @@ jobs:
           echo "Production-readiness static export verified."
 
       - name: Commit verified source implementation
+        if: steps.payload.outputs.applied == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -127,6 +151,7 @@ jobs:
           git push origin HEAD:feature/public-site-production-readiness-v1
 
       - name: Upload verified static build artifact
+        if: steps.payload.outputs.applied == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: cellpinda-production-readiness-static-site
