@@ -6,11 +6,6 @@ on:
       - feature/public-site-production-readiness-v1
     paths:
       - ".automation/apply-production-readiness.trigger"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - ".automation/apply-production-readiness.trigger"
 
 permissions:
   contents: write
@@ -31,7 +26,7 @@ jobs:
           ref: feature/public-site-production-readiness-v1
           fetch-depth: 0
 
-      - name: Verify and extract production-readiness source bundle
+      - name: Download, verify and extract production-readiness source bundle
         id: payload
         shell: bash
         run: |
@@ -43,33 +38,38 @@ jobs:
             exit 0
           fi
 
-          declare -A EXPECTED=(
-            [00]="aa5138178797413aae53c806c56fd092d26352dc496a2f0dfb5b174dc852681f"
-            [01]="33ea44c56afd04f8b2bb2fcdb0426f67dde00503830f2558f97fda1527716829"
-            [02]="e50480b69c86f14f200e9c5e6a7d95327bc08a576d8612f48a076b7526ce832f"
-            [03]="37bd61a9c127b5136886c8c515a83adbd517d36322febc1577d149187f141885"
-            [04]="daa4872e9fd14683fdbee5085b43b47d9cf7aadf8647dd6dd2d629fae2f2998b"
-            [05]="1d17ace0459edfa561e72df93a846fb6a4af99cbd5927028f6693244e4831de3"
-            [06]="0412390a2bca264a5f8eab8f148e3cce38bc641ed77701030baaa78315e73f9f"
-            [07]="2fa0a68889b7a942ac815590b21aa8c345a7f99d189095de812e10f4fef1e1c1"
-          )
+          BUNDLE="/tmp/cellpinda-production-readiness-source.tar.gz"
+          EXPECTED_SHA="5cfa600f26a5511de40a792fd0d1aa6667be61e81ebeed64a3ddeb950969cf72"
+          FILE_ID="18EoDi8dj94buiO0NDyB0_hZfl9cudiIU"
 
-          for part in 00 01 02 03 04 05 06 07; do
-            tr -d '[:space:]' < ".automation/production-source.part.${part}" > "/tmp/production-source.part.${part}"
-            echo "${EXPECTED[$part]}  /tmp/production-source.part.${part}" | sha256sum -c -
-          done
+          download_bundle() {
+            curl \
+              --fail \
+              --location \
+              --retry 3 \
+              --retry-delay 2 \
+              --connect-timeout 20 \
+              --max-time 180 \
+              --silent \
+              --show-error \
+              "$1" \
+              --output "$BUNDLE"
+          }
 
-          cat /tmp/production-source.part.?? > /tmp/cellpinda-production-source.tar.gz.b64
-          echo "e57f8919c025358c92e052e86372bfd24bc3da4c1aab480558d7aa46588f1b2b  /tmp/cellpinda-production-source.tar.gz.b64" | sha256sum -c -
+          download_bundle "https://drive.usercontent.google.com/download?id=${FILE_ID}&export=download&confirm=t" || \
+            download_bundle "https://drive.google.com/uc?export=download&id=${FILE_ID}&confirm=t"
 
-          base64 --decode /tmp/cellpinda-production-source.tar.gz.b64 > /tmp/cellpinda-production-source.tar.gz
-          echo "3de3beb65382c098757806fc5b12b34b895065823d3a10423c22acf2b1542680  /tmp/cellpinda-production-source.tar.gz" | sha256sum -c -
+          echo "${EXPECTED_SHA}  ${BUNDLE}" | sha256sum -c -
+          tar -tzf "$BUNDLE" >/dev/null
 
-          rm -f public/robots.txt
-          tar -xzf /tmp/cellpinda-production-source.tar.gz -C .
           rm -f public/robots.txt
           rm -f .automation/production-source.part.*
           rm -f .automation/apply-production-readiness.trigger
+          rm -f .automation/production-readiness-upload-note.txt
+          rm -f .automation/bundle-sha256.txt
+
+          tar -xzf "$BUNDLE" -C .
+          rm -f public/robots.txt
           echo "applied=true" >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
@@ -133,8 +133,10 @@ jobs:
           test -f out/system-status/index.html
           test -f out/sitemap.xml
           test -f out/robots.txt
+          test -f out/manifest.webmanifest
           grep -q 'Cellpinda' out/index.html
           grep -q 'Importer inquiry' out/importer-inquiry/index.html
+          grep -q 'cellpinda-global-index-production-v1' out/index.html
           echo "Production-readiness static export verified."
 
       - name: Commit verified source implementation
