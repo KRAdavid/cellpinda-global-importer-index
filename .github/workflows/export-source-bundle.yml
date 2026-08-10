@@ -35,12 +35,12 @@ jobs:
             --exclude=.next \
             --exclude=test-results \
             --exclude=playwright-report \
-            -czf cellpinda-source-bundle.tar.gz .
+            -czf "${RUNNER_TEMP}/cellpinda-source-bundle.tar.gz" .
 
       - name: Upload source archive
         uses: actions/upload-artifact@v4
         with:
-          name: cellpinda-source-bundle
-          path: cellpinda-source-bundle.tar.gz
+          name: cellpinda-source-bundle-export
+          path: ${{ runner.temp }}/cellpinda-source-bundle.tar.gz
           if-no-files-found: error
           retention-days: 1
