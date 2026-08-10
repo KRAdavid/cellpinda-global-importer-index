@@ -75,6 +75,22 @@ jobs:
 
           tar -xzf "$BUNDLE" -C .
           rm -f public/robots.txt
+
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("lib/public-site.ts")
+          source = path.read_text(encoding="utf-8")
+          aliases = [
+              "export const IMPORTER_INQUIRY_EMAIL = INQUIRY_EMAIL;",
+              "export const IMPORTER_INQUIRY_PATH = INQUIRY_PATH;",
+          ]
+          for alias in aliases:
+              if alias not in source:
+                  source += f"\n{alias}\n"
+          path.write_text(source, encoding="utf-8")
+          PY
+
           echo "applied=true" >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
