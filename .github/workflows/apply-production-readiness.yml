@@ -6,6 +6,11 @@ on:
       - feature/public-site-production-readiness-v1
     paths:
       - ".automation/apply-production-readiness.trigger"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".automation/apply-production-readiness.trigger"
 
 permissions:
   contents: write
