@@ -67,8 +67,8 @@ jobs:
           python - <<'PY'
           from pathlib import Path
 
-          path = Path("lib/public-site.ts")
-          source = path.read_text(encoding="utf-8")
+          public_site = Path("lib/public-site.ts")
+          source = public_site.read_text(encoding="utf-8")
           aliases = [
               "export const IMPORTER_INQUIRY_EMAIL = INQUIRY_EMAIL;",
               "export const IMPORTER_INQUIRY_PATH = INQUIRY_PATH;",
@@ -76,7 +76,23 @@ jobs:
           for alias in aliases:
               if alias not in source:
                   source += f"\n{alias}\n"
-          path.write_text(source, encoding="utf-8")
+          public_site.write_text(source, encoding="utf-8")
+
+          for route in ["app/manifest.ts", "app/robots.ts", "app/sitemap.ts"]:
+              path = Path(route)
+              route_source = path.read_text(encoding="utf-8")
+              declaration = 'export const dynamic = "force-static";'
+              if declaration not in route_source:
+                  lines = route_source.splitlines()
+                  insert_at = 0
+                  while insert_at < len(lines) and (
+                      lines[insert_at].startswith("import ") or not lines[insert_at].strip()
+                  ):
+                      insert_at += 1
+                  lines.insert(insert_at, "")
+                  lines.insert(insert_at + 1, declaration)
+                  route_source = "\n".join(lines).rstrip() + "\n"
+              path.write_text(route_source, encoding="utf-8")
           PY
 
           echo "applied=true" >> "$GITHUB_OUTPUT"
