@@ -1,6 +1,9 @@
 name: Export source bundle
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - feature/public-site-production-readiness-v1
