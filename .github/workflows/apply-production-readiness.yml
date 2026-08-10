@@ -1,0 +1,182 @@
+name: Apply production readiness implementation
+
+on:
+  push:
+    branches:
+      - feature/public-site-production-readiness-v1
+    paths:
+      - ".automation/apply-production-readiness.trigger"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".automation/apply-production-readiness.trigger"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: apply-production-readiness
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Check out implementation branch
+        uses: actions/checkout@v6
+        with:
+          ref: feature/public-site-production-readiness-v1
+          fetch-depth: 0
+
+      - name: Download, verify and extract production-readiness source bundle
+        id: payload
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ ! -f .automation/apply-production-readiness.trigger ]]; then
+            echo "applied=false" >> "$GITHUB_OUTPUT"
+            echo "Production-readiness payload was already applied."
+            exit 0
+          fi
+
+          BUNDLE="/tmp/cellpinda-production-readiness-source.tar.gz"
+          EXPECTED_SHA="5cfa600f26a5511de40a792fd0d1aa6667be61e81ebeed64a3ddeb950969cf72"
+          FILE_ID="18EoDi8dj94buiO0NDyB0_hZfl9cudiIU"
+
+          download_bundle() {
+            curl \
+              --fail \
+              --location \
+              --retry 3 \
+              --retry-delay 2 \
+              --connect-timeout 20 \
+              --max-time 180 \
+              --silent \
+              --show-error \
+              "$1" \
+              --output "$BUNDLE"
+          }
+
+          download_bundle "https://drive.usercontent.google.com/download?id=${FILE_ID}&export=download&confirm=t" || \
+            download_bundle "https://drive.google.com/uc?export=download&id=${FILE_ID}&confirm=t"
+
+          echo "${EXPECTED_SHA}  ${BUNDLE}" | sha256sum -c -
+          tar -tzf "$BUNDLE" >/dev/null
+
+          rm -f public/robots.txt
+          rm -f .automation/production-source.part.*
+          rm -f .automation/apply-production-readiness.trigger
+          rm -f .automation/production-readiness-upload-note.txt
+          rm -f .automation/bundle-sha256.txt
+
+          tar -xzf "$BUNDLE" -C .
+          rm -f public/robots.txt
+
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("lib/public-site.ts")
+          source = path.read_text(encoding="utf-8")
+          aliases = [
+              "export const IMPORTER_INQUIRY_EMAIL = INQUIRY_EMAIL;",
+              "export const IMPORTER_INQUIRY_PATH = INQUIRY_PATH;",
+          ]
+          for alias in aliases:
+              if alias not in source:
+                  source += f"\n{alias}\n"
+          path.write_text(source, encoding="utf-8")
+          PY
+
+          echo "applied=true" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js
+        if: steps.payload.outputs.applied == 'true'
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Install dependencies
+        if: steps.payload.outputs.applied == 'true'
+        run: npm install --no-package-lock --no-audit --no-fund
+
+      - name: Validate Apps Script feed source
+        if: steps.payload.outputs.applied == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp apps-script/Code.gs /tmp/cellpinda-drive-feed.js
+          node --check /tmp/cellpinda-drive-feed.js
+          node -e "JSON.parse(require('node:fs').readFileSync('apps-script/appsscript.json', 'utf8'))"
+
+      - name: Validate source document index
+        if: steps.payload.outputs.applied == 'true'
+        run: npm run validate
+
+      - name: Test public-feed classification rules
+        if: steps.payload.outputs.applied == 'true'
+        run: npm run test:sync-rules
+
+      - name: Test final-site health-check rules
+        if: steps.payload.outputs.applied == 'true'
+        run: npm run test:public-site
+
+      - name: Build production-readiness static site
+        if: steps.payload.outputs.applied == 'true'
+        run: npm run build
+
+      - name: Install Chromium for responsive browser tests
+        if: steps.payload.outputs.applied == 'true'
+        run: npx playwright install --with-deps chromium
+
+      - name: Test desktop, mobile, inquiry and Guided AI interactions
+        if: steps.payload.outputs.applied == 'true'
+        run: npm run test:e2e
+
+      - name: Verify static export
+        if: steps.payload.outputs.applied == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f out/index.html
+          test -f out/data/index.json
+          test -f out/data/search-index.json
+          test -f out/data/status.json
+          test -f out/data/readiness.json
+          test -f out/data/deployment.json
+          test -f out/document-center/index.html
+          test -f out/ask-cellpinda/index.html
+          test -f out/importer-inquiry/index.html
+          test -f out/privacy/index.html
+          test -f out/system-status/index.html
+          test -f out/sitemap.xml
+          test -f out/robots.txt
+          grep -q 'Cellpinda' out/index.html
+          grep -q 'Importer inquiry' out/importer-inquiry/index.html
+          grep -q 'cellpinda-global-index-production-v1' out/index.html
+          echo "Production-readiness static export verified."
+
+      - name: Commit verified source implementation
+        if: steps.payload.outputs.applied == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "cellpinda-development-bot"
+          git config user.email "cellpinda-development-bot@users.noreply.github.com"
+          git add -A
+          git reset -- .github/workflows
+          git diff --cached --check
+          git commit -m "feat: make public site production-ready"
+          git push origin HEAD:feature/public-site-production-readiness-v1
+
+      - name: Upload verified static build artifact
+        if: steps.payload.outputs.applied == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cellpinda-production-readiness-static-site
+          path: out
+          if-no-files-found: error
+          retention-days: 7

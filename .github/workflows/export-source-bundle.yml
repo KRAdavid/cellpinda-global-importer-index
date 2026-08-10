@@ -1,0 +1,46 @@
+name: Export source bundle
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - feature/public-site-production-readiness-v1
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: export-source-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Create source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          tar \
+            --exclude=.git \
+            --exclude=node_modules \
+            --exclude=out \
+            --exclude=.next \
+            --exclude=test-results \
+            --exclude=playwright-report \
+            -czf "${RUNNER_TEMP}/cellpinda-source-bundle.tar.gz" .
+
+      - name: Upload source archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: cellpinda-source-bundle-export
+          path: ${{ runner.temp }}/cellpinda-source-bundle.tar.gz
+          if-no-files-found: error
+          retention-days: 1
