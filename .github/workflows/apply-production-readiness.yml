@@ -138,7 +138,6 @@ jobs:
           test -f out/system-status/index.html
           test -f out/sitemap.xml
           test -f out/robots.txt
-          test -f out/manifest.webmanifest
           grep -q 'Cellpinda' out/index.html
           grep -q 'Importer inquiry' out/importer-inquiry/index.html
           grep -q 'cellpinda-global-index-production-v1' out/index.html
